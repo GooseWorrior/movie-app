@@ -1,1 +1,79 @@
-<p>movie-list works!</p>
+<div class="p-grid">
+    <p-card class="p-col-12">
+        <form [formGroup]="movieForm">
+            <div class="p-grid p-fluid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-inputgroup">
+                        <button type="button" pButton pRipple label="Search" (click)="searchMovies()"></button>
+                        <input type="text" pInputText placeholder="Title" formControlName="title">         
+                    </div>
+                </div>
+            </div>
+        </form>
+    </p-card>
+    <p-card class="p-col-12" header="Search Result">
+        <div class="p-grid">
+            <div class="p-mr-2 p-field-radiobutton">
+                <p-radioButton name="view" value="table" [(ngModel)]="selectedView" inputId="t"></p-radioButton>
+                <label for="t">Table View</label>
+            </div>
+            <div class="p-mr-2 p-field-radiobutton">
+                <p-radioButton name="view" value="grid" [(ngModel)]="selectedView" inputId="p"></p-radioButton>
+                <label for="p">Grid View</label>
+            </div>
+            <p-dataView class="p-col-12" *ngIf="selectedView === 'grid'" [value]="movies" [paginator]="true" [rows]="9" filterBy="name" [sortField]="sortField" [sortOrder]="sortOrder" layout="grid">
+                <ng-template pTemplate="header">
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
+                        <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Sort by title" (onChange)="onSortChange($event)" styleClass="p-mb-2 p-mb-md-0"></p-dropdown>
+                    </div>
+                </ng-template>
+                <ng-template let-movie pTemplate="gridItem">
+                    <div class="p-col-12 p-md-4">
+                        <p-card [style]="{'margin':'10px'}" [header]="movie.Title">
+                            <div class="product-grid-item-content">
+                                <img [src]="movie.Poster" alt=""/>
+                                <div>{{movie.Type}}</div>
+                                <div>{{movie.Year}}</div>
+                            </div>
+                            <p-footer class="p-grid">
+                                <p-button class="p-col-3 p-offset-8">Details</p-button>
+                            </p-footer>
+                        </p-card>
+                    </div>
+                </ng-template>
+            </p-dataView>
+            <div class="p-mr-2 p-col-12" *ngIf="selectedView === 'table'">
+                <p-table [value]="movies" selectionMode="single" [(selection)]="selectedMovie" (onRowSelect)="onSelect()">
+                    <ng-template pTemplate="header">
+                        <tr>
+                           <th>Title</th>
+                           <th>Year</th>
+                           <th>Type</th>
+                           <th>IMDB id</th> 
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-movie >
+                        <tr [pSelectableRow]="movie">
+                            <td>{{movie.Title}}</td>
+                            <td>{{movie.Year}}</td>
+                            <td>{{movie.Type}}</td>
+                            <td>{{movie.imdbID}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <p-button class="p-col-12" (click)="showCreateDialog()">Add Movie</p-button>
+        </div>
+        <p-messages></p-messages>
+    </p-card>
+</div>
+<p-dialog [(visible)]="display">
+    <p-header>
+        Header content here
+    </p-header>
+    Content
+    <p-footer>
+        <p-button (click)="addMovie()">Add</p-button>
+    </p-footer>
+</p-dialog>
+
