@@ -1,3 +1,4 @@
+<p-toast position="top-right"></p-toast>
 <div class="p-grid">
     <p-card class="p-col-12">
         <form [formGroup]="movieForm">
@@ -10,6 +11,7 @@
                 </div>
             </div>
         </form>
+        <p-progressBar *ngIf="progress" [style]="{'height':'5px'}" mode="indeterminate"></p-progressBar>
     </p-card>
     <p-card class="p-col-12" header="Search Result">
         <div class="p-grid">
@@ -43,7 +45,7 @@
                 </ng-template>
             </p-dataView>
             <div class="p-mr-2 p-col-12" *ngIf="selectedView === 'table'">
-                <p-table [value]="movies" selectionMode="single" [(selection)]="selectedMovie" (onRowSelect)="onSelect()">
+                <p-table [value]="movies" selectionMode="single" [scrollable]="true" scrollHeight="500px" [(selection)]="selectedMovie" (onRowSelect)="onSelect()">
                     <ng-template pTemplate="header">
                         <tr>
                            <th>Title</th>
@@ -64,7 +66,6 @@
             </div>
             <p-button class="p-col-12" (click)="showCreateDialog()">Add Movie</p-button>
         </div>
-        <p-messages></p-messages>
     </p-card>
 </div>
 <p-dialog [(visible)]="display">

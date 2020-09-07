@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, forkJoin } from 'rxjs';
 import { Movie } from './shared/movie-type';
 import { HttpClient } from '@angular/common/http';
 
@@ -8,10 +8,19 @@ import { HttpClient } from '@angular/common/http';
 })
 export class MovieService {
   public baseMovieUrl = 'http://www.omdbapi.com/';
+  public apiKey = '2c15ed90';
   constructor(public http: HttpClient,
               ) { }
-  public getMovie(title: string): Observable<any> {
-    return this.http.get<any>(this.baseMovieUrl, { params: { apikey: '2c15ed90', s: title }});
+
+  public getMeta(title: string): Observable<any> {
+    return this.http.get<any>(this.baseMovieUrl, { params: { apikey: this.apiKey, s: title}});
+  }
+  public getMovies(title: string, pageNumber: number): Observable<any> {
+    const queryList: Array<Observable<any>> = [];
+    for (let i = 1; i <= pageNumber; ++i) {
+      queryList.push(this.http.get<any>(this.baseMovieUrl, { params: { apikey: this.apiKey, s: title, page: i.toString() }}));
+    }
+    return forkJoin(queryList);
   }
 
   public addMovie(): Observable<Movie> {

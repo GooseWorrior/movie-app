@@ -23,6 +23,8 @@ export class MovieListComponent implements OnInit {
   public sortKey: SelectItem;
   public sortOrder = 1;
 
+  public progress = false;
+
   constructor(public movieService: MovieService,
               public messageService: MessageService,
               public fb: FormBuilder) {
@@ -36,7 +38,6 @@ export class MovieListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.views);
   }
 
   public onSelect(): void {
@@ -52,15 +53,28 @@ export class MovieListComponent implements OnInit {
   }
 
   public searchMovies(): void {
-     this.refreshMovieList();
-     this.movieForm.reset();
+     if (this.movieForm.valid) {
+      this.refreshMovieList();
+     } else {
+       this.messageService.add({ severity: 'error', summary: 'Search error', detail: 'Title field is empty' });
+     }
   }
 
   public refreshMovieList(): void {
+    let pageNumber = 0;
     this.movies = [];
-    this.movieService.getMovie(this.movieForm.controls.title.value).subscribe(m => {
-      console.log(m.Search[0]);
-      this.movies = m.Search;
+    this.progress = true;
+    this.movieService.getMeta(this.movieForm.controls.title.value).subscribe(m => {
+      console.log(m);
+      pageNumber = Math.floor(m.totalResults / 10) + (m.totalResults % 10 > 0 ? 1 : 0);
+      console.log(pageNumber);
+      this.movieService.getMovies(this.movieForm.controls.title.value, pageNumber).subscribe(r => {
+        console.log(r);
+        this.movies = (r as Array<any>).reduce((acc: MoviePoster[], cur) => (acc.concat(cur.Search)), []);
+        console.log(this.movies);
+        this.movieForm.reset();
+        this.progress = false;
+      });
     });
   }
 

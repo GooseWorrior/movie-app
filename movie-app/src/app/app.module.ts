@@ -19,6 +19,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { DataViewModule } from 'primeng/dataview';
 import { DropdownModule } from 'primeng/dropdown';
+import { ProgressBarModule } from 'primeng/progressbar/primeng-progressbar';
+import { ToastModule } from 'primeng/toast';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,6 +45,8 @@ import { DropdownModule } from 'primeng/dropdown';
     FormsModule,
     DataViewModule,
     DropdownModule,
+    ProgressBarModule,
+    ToastModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]
