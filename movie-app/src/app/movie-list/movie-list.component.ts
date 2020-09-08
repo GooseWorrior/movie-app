@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Movie, MoviePoster } from '../shared/movie-type';
+import { Movie, MoviePoster, MovieSearchSummary } from '../shared/movie-type';
 import { MovieService } from '../movie.service';
 import { MessageService, SelectItem } from 'primeng/api';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
@@ -14,22 +14,12 @@ import { FavoriteMoviesDialogComponent } from '../favorite-movies-dialog/favorit
 })
 export class MovieListComponent implements OnInit {
   public movies: MoviePoster[] = [];
-  public filteredMovies: MoviePoster[] = [];
   public selectedMovie: MoviePoster;
-  public display = false;
   public views = Object.keys(ViewType).map(k => ViewType[k]);
   public selectedView = ViewType.TABLE;
   public movieForm: FormGroup;
-
-  public sortOptions: SelectItem[];
-  public sortField: string;
-  public sortKey: SelectItem;
-  public sortOrder = 1;
-
+  public movieSearchSummay?: MovieSearchSummary;
   public progress = false;
-
-  public typeOptions: SelectItem[];
-  public type = 'movie';
 
   @ViewChild('favoriteMovies') favoriteMovies: FavoriteMoviesDialogComponent;
   constructor(public movieService: MovieService,
@@ -40,15 +30,6 @@ export class MovieListComponent implements OnInit {
     this.movieForm = this.fb.group({
       title: ['', Validators.required]
     });
-    this.sortOptions = [
-      { label: 'Sort by title', value: 'Title' },
-      { label: 'Sort by year', value: 'Year' },
-    ];
-    this.typeOptions = [
-      { label: 'Only movies', value: 'movie' },
-      { label: 'Only series', value: 'series' },
-      { label: 'Only games', value: 'game' },
-    ];
   }
 
   ngOnInit(): void {
@@ -67,46 +48,60 @@ export class MovieListComponent implements OnInit {
     this.router.navigate(['../details', { imdbID: this.selectedMovie.imdbID, keyWord: this.movieForm.controls.title.value }]);
   }
 
-  public onItemSelect(movie: MoviePoster): void {
-    this.router.navigate(['../details', { imdbID: movie.imdbID, keyWord: this.movieForm.controls.title.value }]);
-  }
-
   public showCreateDialog(): void {
     this.favoriteMovies.show();
   }
 
   public searchMovies(): void {
-     if (this.movieForm.valid) {
+    this.messageService.clear();
+    if (this.movieForm.valid) {
       this.refreshMovieList();
-     } else {
-       this.messageService.add({ severity: 'error', summary: 'Search error', detail: 'Title field is empty' });
-     }
+    } else {
+      this.messageService.add({ key: 'stateInfo', severity: 'error', summary: 'Search error', detail: 'Title field is empty' });
+    }
   }
 
   public refreshMovieList(): void {
     let pageNumber = 0;
+    let totalNumber = 0;
     this.movies = [];
     this.progress = true;
     this.movieService.getMeta(this.movieForm.controls.title.value).subscribe(m => {
-      pageNumber = Math.floor(m.totalResults / 10) + (m.totalResults % 10 > 0 ? 1 : 0);
-      this.movieService.getMovies(this.movieForm.controls.title.value, pageNumber).subscribe(r => {
-        this.movies = (r as Array<any>).reduce((acc: MoviePoster[], cur) => (acc.concat(cur.Search)), []);
+      if (m.Response === 'False') {
+        this.messageService.add({ key: 'stateInfo', severity: 'error', summary: 'Search error', detail: 'API failed: '.concat(m.Error) });
         this.progress = false;
-        this.filteredMovies = this.movies.filter(o => o.Type === this.type);
-      });
+      } else {
+        pageNumber = Math.floor(m.totalResults / 10) + (m.totalResults % 10 > 0 ? 1 : 0);
+        totalNumber = m.totalResults;
+        this.movieService.getMovies(this.movieForm.controls.title.value, pageNumber).subscribe(r => {
+          this.movies = (r as Array<any>).reduce((acc: MoviePoster[], cur) => (acc.concat(cur.Search)), []);
+          this.updateSearchSummary(totalNumber);
+          this.messageService.add({ key: 'searchSummary', severity: 'info', summary: 'Search Result', detail: this.buildSearchSummary() });
+          this.progress = false;
+        });
+      }
+    },
+    err => {
+      this.messageService.add({ key: 'stateInfo', severity: 'error', summary: 'Search error', detail: 'Request failed' });
     });
   }
 
-  public onSortChange(event: any): void {
-    this.sortField = event.value;
-    if (event.value === 'Year') {
-      this.sortOrder = -1;
-    } else {
-      this.sortOrder = 1;
-    }
+  public updateSearchSummary(totalResults: number): void {
+    this.movieSearchSummay = {
+      resultNumber: totalResults,
+      movieNumber: this.movies.filter(m => m.Type === 'movie').length,
+      seriesNumber: this.movies.filter(m => m.Type === 'series').length,
+      gameNumber: this.movies.filter(m => m.Type === 'game').length,
+    };
   }
 
-  public onFilterChange(event: any): void {
-      this.filteredMovies = this.movies.filter(m => m.Type === event.value);
+  public buildSearchSummary(): string {
+    return `We have a total of ${this.movieSearchSummay.resultNumber} results. `
+    .concat((this.movieSearchSummay.resultNumber > 100) ? 'Since the total result number exceed 100, we only pick the first 100 results. ' : '')
+    .concat(`These results contain `)
+    .concat((this.movieSearchSummay.movieNumber > 0) ? `${this.movieSearchSummay.movieNumber} movies` : '')
+    .concat((this.movieSearchSummay.seriesNumber > 0) ? `, ${this.movieSearchSummay.gameNumber === 0 ? 'and ' : ''}${this.movieSearchSummay.seriesNumber} series` : '')
+    .concat((this.movieSearchSummay.gameNumber > 0) ? `, and ${this.movieSearchSummay.gameNumber} games` : '')
+    .concat('.');
   }
 }

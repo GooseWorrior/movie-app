@@ -1,7 +1,7 @@
 <div class="p-grid" *ngIf="movieDetails">
     <p-card class="p-col-12" [header]="movieDetails.Title">
         <div class='p-grid'>
-            <img class="p-col-3" [src]='movieDetails.Poster'>
+            <img class="p-col-3" [src]='movieDetails.Poster' alt="">
             <div class="p-col-3 p-offset-5">
                 <div class='p-mt-2'>Year: {{movieDetails.Year}}</div>
                 <div class='p-mt-2'>Language: {{movieDetails.Language}}</div>

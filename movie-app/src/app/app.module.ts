@@ -23,13 +23,17 @@ import { ProgressBarModule } from 'primeng/progressbar/primeng-progressbar';
 import { ToastModule } from 'primeng/toast';
 import { TabViewModule } from 'primeng/tabview';
 import { FavoriteMoviesDialogComponent } from './favorite-movies-dialog/favorite-movies-dialog.component';
+import { TableViewComponent } from './views/table-view/table-view.component';
+import { GridViewComponent } from './views/grid-view/grid-view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MovieDetailsComponent,
     MovieListComponent,
-    FavoriteMoviesDialogComponent
+    FavoriteMoviesDialogComponent,
+    TableViewComponent,
+    GridViewComponent
   ],
   imports: [
     BrowserModule,

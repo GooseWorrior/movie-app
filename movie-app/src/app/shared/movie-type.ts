@@ -43,3 +43,10 @@ export interface MoviePoster {
     Year: string;
     imdbID: string;
 }
+
+export interface MovieSearchSummary {
+    resultNumber: number;
+    movieNumber: number;
+    seriesNumber: number;
+    gameNumber: number;
+}
