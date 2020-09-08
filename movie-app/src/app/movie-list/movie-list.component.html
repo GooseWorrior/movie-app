@@ -23,10 +23,11 @@
                 <p-radioButton name="view" value="grid" [(ngModel)]="selectedView" inputId="p"></p-radioButton>
                 <label for="p">Grid View</label>
             </div>
-            <p-dataView class="p-col-12" *ngIf="selectedView === 'grid'" [value]="movies" [paginator]="true" [rows]="9" filterBy="name" [sortField]="sortField" [sortOrder]="sortOrder" layout="grid">
+            <p-dataView class="p-col-12" *ngIf="selectedView === 'grid'" [value]="filteredMovies" [paginator]="true" [rows]="9" filterBy="name" [sortField]="sortField" [sortOrder]="sortOrder" layout="grid">
                 <ng-template pTemplate="header">
                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
                         <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Sort by title" (onChange)="onSortChange($event)" styleClass="p-mb-2 p-mb-md-0"></p-dropdown>
+                        <p-dropdown [options]="typeOptions" [(ngModel)]="type" placeholder="Only movies" (onChange)="onFilterChange($event)" styleClass="p-mb-2 p-mb-md-0"></p-dropdown>
                     </div>
                 </ng-template>
                 <ng-template let-movie pTemplate="gridItem">

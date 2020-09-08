@@ -14,6 +14,7 @@ import { FavoriteMoviesDialogComponent } from '../favorite-movies-dialog/favorit
 })
 export class MovieListComponent implements OnInit {
   public movies: MoviePoster[] = [];
+  public filteredMovies: MoviePoster[] = [];
   public selectedMovie: MoviePoster;
   public display = false;
   public views = Object.keys(ViewType).map(k => ViewType[k]);
@@ -27,6 +28,9 @@ export class MovieListComponent implements OnInit {
 
   public progress = false;
 
+  public typeOptions: SelectItem[];
+  public type = 'movie';
+
   @ViewChild('favoriteMovies') favoriteMovies: FavoriteMoviesDialogComponent;
   constructor(public movieService: MovieService,
               public messageService: MessageService,
@@ -37,9 +41,14 @@ export class MovieListComponent implements OnInit {
       title: ['', Validators.required]
     });
     this.sortOptions = [
-      {label: 'Sort by title', value: 'Title' },
-      {label: 'Sort by year', value: 'Year' },
-  ];
+      { label: 'Sort by title', value: 'Title' },
+      { label: 'Sort by year', value: 'Year' },
+    ];
+    this.typeOptions = [
+      { label: 'Only movies', value: 'movie' },
+      { label: 'Only series', value: 'series' },
+      { label: 'Only games', value: 'game' },
+    ];
   }
 
   ngOnInit(): void {
@@ -83,6 +92,7 @@ export class MovieListComponent implements OnInit {
       this.movieService.getMovies(this.movieForm.controls.title.value, pageNumber).subscribe(r => {
         this.movies = (r as Array<any>).reduce((acc: MoviePoster[], cur) => (acc.concat(cur.Search)), []);
         this.progress = false;
+        this.filteredMovies = this.movies.filter(o => o.Type === this.type);
       });
     });
   }
@@ -94,5 +104,9 @@ export class MovieListComponent implements OnInit {
     } else {
       this.sortOrder = 1;
     }
+  }
+
+  public onFilterChange(event: any): void {
+      this.filteredMovies = this.movies.filter(m => m.Type === event.value);
   }
 }
