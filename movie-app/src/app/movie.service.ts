@@ -8,7 +8,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class MovieService {
   public baseMovieUrl = 'https://www.omdbapi.com/';
-  public apiKey = '2c15ed90';
+  public apiKey = '8bca3676';
+  public alternativeApiKey = '2c15ed90';
   constructor(public http: HttpClient,
               ) { }
 
@@ -17,10 +18,6 @@ export class MovieService {
   }
   public getMovies(title: string, pageNumber: number): Observable<any> {
     const queryList: Array<Observable<any>> = [];
-    // accept at most 100 pages of results for now, due to some errors related to https request limit
-    if (pageNumber > 100) {
-      pageNumber = 100;
-    }
     for (let i = 1; i <= pageNumber; ++i) {
       queryList.push(this.http.get<any>(this.baseMovieUrl, { params: { apikey: this.apiKey, s: title, page: i.toString() }}));
     }
