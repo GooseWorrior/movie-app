@@ -22,6 +22,9 @@ export class MovieService {
     }
     return forkJoin(queryList);
   }
+  public getMovieDetails(id: string): Observable<any> {
+    return this.http.get<any>(this.baseMovieUrl, { params: { apikey: this.apiKey, i: id }});
+  }
 
   public addMovie(): Observable<Movie> {
     return this.http.post<Movie>(this.baseMovieUrl,  { params: { apikey: '2c15ed90'}});

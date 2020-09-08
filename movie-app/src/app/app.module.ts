@@ -21,6 +21,7 @@ import { DataViewModule } from 'primeng/dataview';
 import { DropdownModule } from 'primeng/dropdown';
 import { ProgressBarModule } from 'primeng/progressbar/primeng-progressbar';
 import { ToastModule } from 'primeng/toast';
+import { TabViewModule } from 'primeng/tabview';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { ToastModule } from 'primeng/toast';
     DataViewModule,
     DropdownModule,
     ProgressBarModule,
-    ToastModule
+    ToastModule,
+    TabViewModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

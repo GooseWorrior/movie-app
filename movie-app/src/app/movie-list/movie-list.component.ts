@@ -4,6 +4,7 @@ import { MovieService } from '../movie.service';
 import { MessageService, SelectItem } from 'primeng/api';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ViewType } from '../shared/util-type';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-movie-list',
@@ -27,6 +28,7 @@ export class MovieListComponent implements OnInit {
 
   constructor(public movieService: MovieService,
               public messageService: MessageService,
+              public router: Router,
               public fb: FormBuilder) {
     this.movieForm = this.fb.group({
       title: ['', Validators.required]
@@ -41,7 +43,8 @@ export class MovieListComponent implements OnInit {
   }
 
   public onSelect(): void {
-    this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Via MessageService' });
+    console.log('1');
+    this.router.navigate(['../details', { imdbID: this.selectedMovie.imdbID }]);
   }
 
   public showCreateDialog(): void {
