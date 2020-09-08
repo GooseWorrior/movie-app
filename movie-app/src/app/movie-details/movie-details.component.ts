@@ -20,12 +20,10 @@ export class MovieDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(d => {
-      console.log(d.get('imdbID'));
       this.keyWord = d.get('keyWord');
       this.movieService.getMovieDetails(d.get('imdbID')).subscribe(m => {
         this.movieDetails = m;
         this.isFavorite = this.favoriteMovieService.isFavoriteMovie(m.imdbID);
-        console.log(m);
       });
     });
   }

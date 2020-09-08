@@ -8,10 +8,8 @@ export class FavoriteMoviesService {
 
   constructor() {
     if (localStorage.getItem('favoriteMovies') === null) {
-      console.log('1');
       localStorage.setItem('favoriteMovies', JSON.stringify([]));
     }
-    console.log(JSON.parse(localStorage.getItem('favoriteMovies')));
   }
 
   public getFavoriteMovies(): Movie[] {

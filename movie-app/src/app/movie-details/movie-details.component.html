@@ -3,33 +3,40 @@
         <div class='p-grid'>
             <img class="p-col-3" [src]='movieDetails.Poster'>
             <div class="p-col-3 p-offset-5">
-                <div class='p-mt-1'>{{movieDetails.Year}}</div>
-                <div class='p-mt-1'>{{movieDetails.Language}}</div>
-                <div class='p-mt-1'>{{movieDetails.Country}}</div>
+                <div class='p-mt-2'>Year: {{movieDetails.Year}}</div>
+                <div class='p-mt-2'>Language: {{movieDetails.Language}}</div>
+                <div class='p-mt-2'>Country: {{movieDetails.Country}}</div>
+                <div class="p-mt-2">Website: {{movieDetails.Website}}</div>
             </div>
         </div>
         <p-footer class='p-grid'>
-            <p-button class="p-col-2 p-offset-7" (click)="addToFavorite()" [disabled]="isFavorite">Add to Favorite</p-button>
+            <div class="p-col-2">
+                <div *ngIf="isFavorite">
+                    <i class="pi pi-star" style="color:gold; font-size: 2rem"></i>
+                    <span class="p-ml-2" style="font-size: 1.5rem">Favorite</span>
+                </div>
+            </div>
+            <p-button class="p-col-2 p-offset-5" (click)="addToFavorite()" [disabled]="isFavorite">Add to Favorite</p-button>
             <p-button class="p-col-3" (click)="removeFromFavorite()" [disabled]="!isFavorite">Remove from Favorite</p-button>
         </p-footer>
     </p-card>
     <p-card class="p-col-12">
         <p-tabView>
             <p-tabPanel header="General Information">
-                <div class='p-mt-1'>{{movieDetails.Director}}</div>
-                <div class='p-mt-1'>{{movieDetails.Actors}}</div>
-                <div class='p-mt-1'>{{movieDetails.Awards}}</div>
-                <div class='p-mt-1'>{{movieDetails.Genre}}</div>
-                <div class='p-mt-1'>{{movieDetails.Writer}}</div>
+                <div class='p-mt-1'>Director: {{movieDetails.Director}}</div>
+                <div class='p-mt-1'>Actors: {{movieDetails.Actors}}</div>
+                <div class='p-mt-1'>Awards: {{movieDetails.Awards}}</div>
+                <div class='p-mt-1'>Genre: {{movieDetails.Genre}}</div>
+                <div class='p-mt-1'>Writer: {{movieDetails.Writer}}</div>
             </p-tabPanel>
             <p-tabPanel header="Rating and Boxoffice">
-                <div class='p-mt-1'>{{movieDetails.Metascore}}</div>
-                <div class='p-mt-1'>{{movieDetails.imdbRating}}</div>
-                <div class='p-mt-1'>{{movieDetails.imdbVotes}}</div>
-                <div class='p-mt-1'>{{movieDetails.BoxOffice}}</div>
+                <div class='p-mt-1'>Meta Score: {{movieDetails.Metascore}}</div>
+                <div class='p-mt-1'>IMDB Rating: {{movieDetails.imdbRating}}</div>
+                <div class='p-mt-1'>IMDB Votes: {{movieDetails.imdbVotes}}</div>
+                <div class='p-mt-1'>Box Office: {{movieDetails.BoxOffice}}</div>
             </p-tabPanel>
             <p-tabPanel header="Plot">
-                <div class='p-mt-1'>{{movieDetails.Plot}}</div>
+                <div class='p-mt-1'>Plot: {{movieDetails.Plot}}</div>
             </p-tabPanel>
         </p-tabView>
     </p-card>

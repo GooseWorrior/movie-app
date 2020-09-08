@@ -55,7 +55,6 @@ export class MovieListComponent implements OnInit {
   }
 
   public onSelect(): void {
-    console.log('1');
     this.router.navigate(['../details', { imdbID: this.selectedMovie.imdbID, keyWord: this.movieForm.controls.title.value }]);
   }
 
@@ -80,20 +79,15 @@ export class MovieListComponent implements OnInit {
     this.movies = [];
     this.progress = true;
     this.movieService.getMeta(this.movieForm.controls.title.value).subscribe(m => {
-      console.log(m);
       pageNumber = Math.floor(m.totalResults / 10) + (m.totalResults % 10 > 0 ? 1 : 0);
-      console.log(pageNumber);
       this.movieService.getMovies(this.movieForm.controls.title.value, pageNumber).subscribe(r => {
-        console.log(r);
         this.movies = (r as Array<any>).reduce((acc: MoviePoster[], cur) => (acc.concat(cur.Search)), []);
-        console.log(this.movies);
         this.progress = false;
       });
     });
   }
 
   public onSortChange(event: any): void {
-    console.log(this.sortKey);
     this.sortField = event.value;
     if (event.value === 'Year') {
       this.sortOrder = -1;
