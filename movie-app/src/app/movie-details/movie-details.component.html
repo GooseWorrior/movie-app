@@ -9,8 +9,8 @@
             </div>
         </div>
         <p-footer class='p-grid'>
-            <p-button class="p-col-2 p-offset-7" (click)="addToFavorite()">Add to Favorite</p-button>
-            <p-button class="p-col-3" (click)="removeFromFavorite()">Remove from Favorite</p-button>
+            <p-button class="p-col-2 p-offset-7" (click)="addToFavorite()" [disabled]="isFavorite">Add to Favorite</p-button>
+            <p-button class="p-col-3" (click)="removeFromFavorite()" [disabled]="!isFavorite">Remove from Favorite</p-button>
         </p-footer>
     </p-card>
     <p-card class="p-col-12">

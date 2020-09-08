@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Movie, MoviePoster } from '../shared/movie-type';
 import { MovieService } from '../movie.service';
 import { MessageService, SelectItem } from 'primeng/api';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ViewType } from '../shared/util-type';
 import { Router, ActivatedRoute } from '@angular/router';
+import { FavoriteMoviesDialogComponent } from '../favorite-movies-dialog/favorite-movies-dialog.component';
 
 @Component({
   selector: 'app-movie-list',
@@ -26,6 +27,7 @@ export class MovieListComponent implements OnInit {
 
   public progress = false;
 
+  @ViewChild('favoriteMovies') favoriteMovies: FavoriteMoviesDialogComponent;
   constructor(public movieService: MovieService,
               public messageService: MessageService,
               public router: Router,
@@ -58,15 +60,11 @@ export class MovieListComponent implements OnInit {
   }
 
   public onItemSelect(movie: MoviePoster): void {
-    this.router.navigate(['../details', { imdbID: movie.imdbID, keyWord: this.movieForm.controls.title.value }])
+    this.router.navigate(['../details', { imdbID: movie.imdbID, keyWord: this.movieForm.controls.title.value }]);
   }
 
   public showCreateDialog(): void {
-    this.display = true;
-  }
-
-  public addMovie(): void {
-    this.display = false;
+    this.favoriteMovies.show();
   }
 
   public searchMovies(): void {

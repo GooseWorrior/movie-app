@@ -22,12 +22,14 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ProgressBarModule } from 'primeng/progressbar/primeng-progressbar';
 import { ToastModule } from 'primeng/toast';
 import { TabViewModule } from 'primeng/tabview';
+import { FavoriteMoviesDialogComponent } from './favorite-movies-dialog/favorite-movies-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MovieDetailsComponent,
-    MovieListComponent
+    MovieListComponent,
+    FavoriteMoviesDialogComponent
   ],
   imports: [
     BrowserModule,

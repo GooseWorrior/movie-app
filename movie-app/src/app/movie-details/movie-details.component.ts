@@ -12,7 +12,7 @@ export class MovieDetailsComponent implements OnInit {
 
   public movieDetails?: Movie;
   public keyWord = '';
-
+  public isFavorite = false;
   constructor(private route: ActivatedRoute,
               private router: Router,
               private movieService: MovieService,
@@ -24,17 +24,20 @@ export class MovieDetailsComponent implements OnInit {
       this.keyWord = d.get('keyWord');
       this.movieService.getMovieDetails(d.get('imdbID')).subscribe(m => {
         this.movieDetails = m;
+        this.isFavorite = this.favoriteMovieService.isFavoriteMovie(m.imdbID);
         console.log(m);
       });
     });
   }
 
   public addToFavorite(): void {
-
+    this.favoriteMovieService.addMovie(this.movieDetails);
+    this.isFavorite = true;
   }
 
   public removeFromFavorite(): void {
-
+    this.favoriteMovieService.removeMovie(this.movieDetails.imdbID);
+    this.isFavorite = false;
   }
 
   public back(): void {

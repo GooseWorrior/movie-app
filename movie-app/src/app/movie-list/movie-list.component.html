@@ -64,17 +64,10 @@
                     </ng-template>
                 </p-table>
             </div>
-            <p-button class="p-col-12" (click)="showCreateDialog()">Add Movie</p-button>
+            <p-button class="p-col-12" (click)="showCreateDialog()">Favorite Movies</p-button>
         </div>
     </p-card>
 </div>
-<p-dialog [(visible)]="display">
-    <p-header>
-        Header content here
-    </p-header>
-    Content
-    <p-footer>
-        <p-button (click)="addMovie()">Add</p-button>
-    </p-footer>
-</p-dialog>
+<app-favorite-movies-dialog #favoriteMovies [keyWord]='movieForm.controls.title.value'></app-favorite-movies-dialog>
+
 

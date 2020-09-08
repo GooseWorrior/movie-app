@@ -1,0 +1,23 @@
+<p-dialog [(visible)]="display" header="Favorite Movies">
+    <p-table [value]="favoriteMovies" selectionMode="single" [scrollable]="true" scrollHeight="500px" [(selection)]="selectedFavoriteMovie" (onRowSelect)="onSelect()">
+        <ng-template pTemplate="header">
+            <tr>
+               <th>Title</th>
+               <th>Year</th>
+               <th>Type</th>
+               <th>IMDB id</th> 
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-movie >
+            <tr [pSelectableRow]="movie">
+                <td>{{movie.Title}}</td>
+                <td>{{movie.Year}}</td>
+                <td>{{movie.Type}}</td>
+                <td>{{movie.imdbID}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <p-footer class="p-grid">
+        <p-button class="p-col-3 p-offset-8"(click)="hide()">Back</p-button>
+    </p-footer>
+</p-dialog>
