@@ -18,6 +18,9 @@ export class MovieService {
   }
   public getMovies(title: string, pageNumber: number): Observable<any> {
     const queryList: Array<Observable<any>> = [];
+    if (pageNumber > 10) {
+      pageNumber = 10;
+    }
     for (let i = 1; i <= pageNumber; ++i) {
       queryList.push(this.http.get<any>(this.baseMovieUrl, { params: { apikey: this.apiKey, s: title, page: i.toString() }}));
     }
