@@ -11,6 +11,7 @@ import { Movie } from '../shared/movie-type';
 export class MovieDetailsComponent implements OnInit {
 
   public movieDetails?: Movie;
+  public keyWord = '';
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -20,6 +21,7 @@ export class MovieDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(d => {
       console.log(d.get('imdbID'));
+      this.keyWord = d.get('keyWord');
       this.movieService.getMovieDetails(d.get('imdbID')).subscribe(m => {
         this.movieDetails = m;
         console.log(m);
@@ -36,7 +38,7 @@ export class MovieDetailsComponent implements OnInit {
   }
 
   public back(): void {
-    this.router.navigate(['../']);
+    this.router.navigate(['../movies', { restoreKey: this.keyWord }]);
   }
 
 }

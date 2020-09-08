@@ -38,7 +38,7 @@
                                 <div>{{movie.Year}}</div>
                             </div>
                             <p-footer class="p-grid">
-                                <p-button class="p-col-3 p-offset-8">Details</p-button>
+                                <p-button (click)="onItemSelect(movie)" class="p-col-3 p-offset-8">Details</p-button>
                             </p-footer>
                         </p-card>
                     </div>

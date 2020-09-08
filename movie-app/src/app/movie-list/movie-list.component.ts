@@ -4,7 +4,7 @@ import { MovieService } from '../movie.service';
 import { MessageService, SelectItem } from 'primeng/api';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ViewType } from '../shared/util-type';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-movie-list',
@@ -29,6 +29,7 @@ export class MovieListComponent implements OnInit {
   constructor(public movieService: MovieService,
               public messageService: MessageService,
               public router: Router,
+              private route: ActivatedRoute,
               public fb: FormBuilder) {
     this.movieForm = this.fb.group({
       title: ['', Validators.required]
@@ -40,11 +41,24 @@ export class MovieListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.route.paramMap.subscribe(d => {
+      const key = d.get('restoreKey');
+      if (key) {
+        this.movieForm.patchValue({
+          title: key,
+        });
+        this.refreshMovieList();
+      }
+    });
   }
 
   public onSelect(): void {
     console.log('1');
-    this.router.navigate(['../details', { imdbID: this.selectedMovie.imdbID }]);
+    this.router.navigate(['../details', { imdbID: this.selectedMovie.imdbID, keyWord: this.movieForm.controls.title.value }]);
+  }
+
+  public onItemSelect(movie: MoviePoster): void {
+    this.router.navigate(['../details', { imdbID: movie.imdbID, keyWord: this.movieForm.controls.title.value }])
   }
 
   public showCreateDialog(): void {
@@ -75,7 +89,6 @@ export class MovieListComponent implements OnInit {
         console.log(r);
         this.movies = (r as Array<any>).reduce((acc: MoviePoster[], cur) => (acc.concat(cur.Search)), []);
         console.log(this.movies);
-        this.movieForm.reset();
         this.progress = false;
       });
     });
