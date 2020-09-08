@@ -1,0 +1,18 @@
+<p-table [value]="movies" selectionMode="single" [scrollable]="true" scrollHeight="500px" [(selection)]="selectedMovie" (onRowSelect)="onSelect()">
+    <ng-template pTemplate="header">
+        <tr>
+           <th pSortableColumn="Title">Title <p-sortIcon field="Title"></p-sortIcon></th>
+           <th pSortableColumn="Year">Year <p-sortIcon field="Year"></p-sortIcon></th>
+           <th pSortableColumn="Type">Type <p-sortIcon field="Type"></p-sortIcon></th>
+           <th pSortableColumn="id">IMDB id <p-sortIcon field="id"></p-sortIcon></th> 
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-movie >
+        <tr [pSelectableRow]="movie">
+            <td>{{movie.Title}}</td>
+            <td>{{movie.Year}}</td>
+            <td>{{movie.Type}}</td>
+            <td>{{movie.imdbID}}</td>
+        </tr>
+    </ng-template>
+</p-table>
