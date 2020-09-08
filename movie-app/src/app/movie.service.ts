@@ -8,8 +8,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class MovieService {
   public baseMovieUrl = 'https://www.omdbapi.com/';
-  public apiKey = '8bca3676';
-  public alternativeApiKey = '2c15ed90';
+  public apiKey = '2c15ed90';
+  public alternativeApiKey = '8bca3676';
   constructor(public http: HttpClient,
               ) { }
 
