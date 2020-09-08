@@ -1,0 +1,22 @@
+<p-dataView [value]="filteredMovies" [paginator]="true" [rows]="9" filterBy="name" [sortField]="sortField" [sortOrder]="sortOrder" layout="grid">
+    <ng-template pTemplate="header">
+        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
+            <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Sort by title" (onChange)="onSortChange($event)" styleClass="p-mb-2 p-mb-md-0"></p-dropdown>
+            <p-dropdown [options]="typeOptions" [(ngModel)]="type" placeholder="Only movies" (onChange)="onFilterChange($event)" styleClass="p-mb-2 p-mb-md-0"></p-dropdown>
+        </div>
+    </ng-template>
+    <ng-template let-movie pTemplate="gridItem">
+        <div class="p-col-12 p-md-4">
+            <p-card [style]="{'margin':'10px'}" [header]="movie.Title">
+                <div class="product-grid-item-content">
+                    <img [src]="movie.Poster" alt=""/>
+                    <div>{{movie.Type}}</div>
+                    <div>{{movie.Year}}</div>
+                </div>
+                <p-footer class="p-grid">
+                    <p-button (click)="onItemSelect(movie)" class="p-col-3 p-offset-8">Details</p-button>
+                </p-footer>
+            </p-card>
+        </div>
+    </ng-template>
+</p-dataView>
